@@ -4,19 +4,22 @@ import { readdirSync } from "fs";
 const PATH_ROUTER = `${__dirname}`;
 const router = Router();
 
-// limpiar las rutas de los nombres de los archivos...
-const cleafilename = (filename: string) => {
-  return filename.split(".").shift();
+/**
+ *
+ * @returns
+ */
+const cleanFileName = (fileName: string) => {
+  const file = fileName.split(".").shift();
+  return file;
 };
 
-readdirSync(PATH_ROUTER).filter((filename) => {
-  const cleanName = cleafilename(filename);
+readdirSync(PATH_ROUTER).filter((fileName) => {
+  const cleanName = cleanFileName(fileName);
   if (cleanName !== "index") {
     import(`./${cleanName}`).then((moduleRouter) => {
-      console.log("cargando ruta items")
       router.use(`/${cleanName}`, moduleRouter.router);
     });
   }
 });
 
-export default router;
+export { router };
